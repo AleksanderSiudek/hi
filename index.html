@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mam pytanie...</title>
+
+<!-- ===== PODGLĄD LINKA NA FB / MESSENGER (edytuj jeśli chcesz) ===== -->
+<meta property="og:title" content="mam do Ciebie pytanie :)))">
+<meta property="og:description" content="kliknij i zobacz...">
+<meta property="og:type" content="website">
+<!-- <meta property="og:image" content="URL_DO_OBRAZKA"> podmień jeśli chcesz miniaturkę -->
+
+<style>
+  :root{
+    --blush:#ffd6e8;
+    --lav:#d9c7ff;
+    --peach:#ffe3c9;
+    --ink:#3a2b4a;
+    --ink-soft:#6b5a7e;
+    --card:#fffafd;
+    --yes:#ff4f8b;
+    --yes-ink:#fff;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;margin:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    color:var(--ink);
+    background:linear-gradient(150deg,var(--blush) 0%,var(--lav) 55%,var(--peach) 100%);
+    background-attachment:fixed;
+    min-height:100dvh;
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;overflow-x:hidden;
+  }
+  .stage{width:100%;max-width:420px}
+  .screen{display:none;animation:pop .45s cubic-bezier(.2,.8,.25,1)}
+  .screen.active{display:block}
+  @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+
+  .card{
+    background:var(--card);
+    border-radius:28px;
+    padding:34px 26px 30px;
+    text-align:center;
+    box-shadow:0 18px 50px rgba(120,80,150,.28);
+  }
+  .emoji{font-size:66px;line-height:1;margin-bottom:14px;display:block}
+  h1{font-size:26px;margin:0 0 8px;font-weight:800;letter-spacing:-.3px}
+  p.sub{margin:0 0 22px;color:var(--ink-soft);font-size:16px;line-height:1.4}
+
+  .btns{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap;min-height:60px}
+  button{
+    font-family:inherit;font-weight:700;font-size:17px;
+    border:none;border-radius:100px;padding:15px 26px;cursor:pointer;
+    transition:transform .12s ease, box-shadow .2s ease;
+  }
+  button:active{transform:scale(.96)}
+  .yes{
+    background:var(--yes);color:var(--yes-ink);
+    box-shadow:0 8px 20px rgba(255,79,139,.4);
+  }
+  .no{
+    background:#e9e4f0;color:var(--ink-soft);
+  }
+  .ghost{
+    background:transparent;color:var(--ink);
+    border:2px solid rgba(58,43,74,.18);font-weight:700;
+  }
+  .primary{
+    background:var(--yes);color:#fff;width:100%;
+    box-shadow:0 8px 20px rgba(255,79,139,.4);margin-top:6px;
+  }
+
+  .field{text-align:left;margin:0 0 16px}
+  .field label{display:block;font-size:14px;font-weight:700;color:var(--ink-soft);margin-bottom:7px}
+  .field input{
+    width:100%;font-family:inherit;font-size:16px;
+    padding:14px 16px;border:2px solid #ece5f2;border-radius:16px;
+    background:#fff;color:var(--ink);
+  }
+  .field input:focus{outline:none;border-color:var(--yes)}
+
+  .hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+  .heart{position:absolute;font-size:24px;animation:fall linear forwards}
+  @keyframes fall{
+    from{transform:translateY(-40px) rotate(0);opacity:1}
+    to{transform:translateY(110vh) rotate(360deg);opacity:.9}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .screen{animation:none}
+    .heart{animation-duration:.01s!important;display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- 0: intro -->
+  <section class="screen active" id="s0">
+    <div class="card">
+      <span class="emoji">:)))</span>
+      <h1>mam do Ciebie pytanie</h1>
+      <p class="sub">tylko się nie śmiej dobra?</p>
+      <div class="btns">
+        <button class="ghost" onclick="go(1)">no dobra, pokaż →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1: pytanie -->
+  <section class="screen" id="s1">
+    <div class="card">
+      <span class="emoji">🥺</span>
+      <h1 id="q">Pójdziesz ze mną na randkę?</h1>
+      <p class="sub">no weź.</p>
+      <div class="btns">
+        <button class="yes" id="yesBtn" onclick="go(2)">TAK ❤️</button>
+        <button class="no" id="noBtn">nie</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2: celebracja -->
+  <section class="screen" id="s2">
+    <div class="card">
+      <span class="emoji">🎉</span>
+      <h1>Zaraz... naprawdę TAK??</h1>
+      <p class="sub">byłem pewny że powiesz nie 😭 dobra, ogarniam się</p>
+      <div class="btns">
+        <button class="ghost" onclick="go(3)">okej okej →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3: termin -->
+  <section class="screen" id="s3">
+    <div class="card">
+      <span class="emoji">📅</span>
+      <h1>To kiedy masz czas?</h1>
+      <p class="sub" style="margin-bottom:20px">wybierz dzień i godzinę</p>
+      <div class="field">
+        <label for="day">Który dzień</label>
+        <input type="date" id="day">
+      </div>
+      <div class="field">
+        <label for="time">O której</label>
+        <input type="time" id="time" value="18:00">
+      </div>
+      <button class="primary" onclick="setDate()">ustaw randkę 💌</button>
+    </div>
+  </section>
+
+  <!-- 4: koniec -->
+  <section class="screen" id="s4">
+    <div class="card">
+      <span class="emoji">✨</span>
+      <h1>Zapisane!</h1>
+      <p class="sub" id="finalTxt">widzimy się.</p>
+      <p class="sub" style="margin:0">nie mogę się doczekać 🖤</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="hearts" id="hearts" aria-hidden="true"></div>
+
+<script>
+  /* ==================== EDYTUJ TUTAJ ==================== */
+  const CONFIG = {
+    herName: "",   // np. "Kasiu" -> pytanie zmieni się na "...na randkę, Kasiu?". Zostaw "" jeśli nie chcesz.
+  };
+  /* ===================================================== */
+
+  if (CONFIG.herName.trim()){
+    document.getElementById('q').textContent =
+      "Pójdziesz ze mną na randkę, " + CONFIG.herName.trim() + "?";
+  }
+
+  const screens = [...document.querySelectorAll('.screen')];
+  function go(n){
+    screens.forEach(s=>s.classList.remove('active'));
+    document.getElementById('s'+n).classList.add('active');
+    if(n===3){ // dzisiejsza data jako minimum
+      const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
+      document.getElementById('day').min=d.toISOString().slice(0,10);
+    }
+    if(n===2) rain();
+  }
+
+  /* ---- uciekające "nie" ---- */
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.getElementById('yesBtn');
+  let yesScale = 1;
+
+  function dodge(e){
+    if(e) e.preventDefault();
+    noBtn.style.position = 'fixed';
+    const bw = noBtn.offsetWidth, bh = noBtn.offsetHeight;
+    const maxX = window.innerWidth  - bw - 12;
+    const maxY = window.innerHeight - bh - 12;
+    const x = Math.max(12, Math.random()*maxX);
+    const y = Math.max(12, Math.random()*maxY);
+    noBtn.style.left = x+'px';
+    noBtn.style.top  = y+'px';
+    // "tak" rośnie z każdą próbą
+    yesScale = Math.min(yesScale+0.12, 2);
+    yesBtn.style.transform = 'scale('+yesScale+')';
+  }
+  ['mouseenter','touchstart','click','pointerdown'].forEach(ev=>
+    noBtn.addEventListener(ev, dodge, {passive:false})
+  );
+
+  /* ---- termin ---- */
+  function setDate(){
+    const day = document.getElementById('day').value;
+    const time = document.getElementById('time').value;
+    if(!day){ alert('wybierz dzień :)'); return; }
+    const dni=['niedzielę','poniedziałek','wtorek','środę','czwartek','piątek','sobotę'];
+    const d = new Date(day+'T'+(time||'18:00'));
+    const txt = dni[d.getDay()] + ', ' +
+      d.getDate() + '.' + String(d.getMonth()+1).padStart(2,'0') +
+      (time ? ' o '+time : '');
+    document.getElementById('finalTxt').textContent = 'widzimy się w '+txt+'.';
+    go(4); rain();
+  }
+
+  /* ---- serduszka ---- */
+  function rain(){
+    const box=document.getElementById('hearts');
+    const em=['❤️','💗','🩷','✨','💌'];
+    for(let i=0;i<26;i++){
+      const h=document.createElement('span');
+      h.className='heart'; h.textContent=em[i%em.length];
+      h.style.left=Math.random()*100+'vw';
+      h.style.animationDuration=(2.5+Math.random()*2.5)+'s';
+      h.style.animationDelay=(Math.random()*.6)+'s';
+      h.style.fontSize=(16+Math.random()*22)+'px';
+      box.appendChild(h);
+      setTimeout(()=>h.remove(),6000);
+    }
+  }
+</script>
+</body>
+</html>
