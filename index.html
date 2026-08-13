@@ -5,22 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Mam pytanie...</title>
 
-<!-- ===== PODGLĄD LINKA NA FB / MESSENGER (edytuj jeśli chcesz) ===== -->
+<!-- ===== PODGLĄD LINKA NA FB / MESSENGER ===== -->
 <meta property="og:title" content="mam do Ciebie pytanie :)))">
 <meta property="og:description" content="kliknij i zobacz...">
 <meta property="og:type" content="website">
-<!-- <meta property="og:image" content="URL_DO_OBRAZKA"> podmień jeśli chcesz miniaturkę -->
 
 <style>
   :root{
-    --blush:#ffd6e8;
-    --lav:#d9c7ff;
-    --peach:#ffe3c9;
-    --ink:#3a2b4a;
-    --ink-soft:#6b5a7e;
-    --card:#fffafd;
-    --yes:#ff4f8b;
-    --yes-ink:#fff;
+    --blush:#ffd6e8; --lav:#d9c7ff; --peach:#ffe3c9;
+    --ink:#3a2b4a; --ink-soft:#6b5a7e; --card:#fffafd;
+    --yes:#ff4f8b; --yes-ink:#fff;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%;margin:0}
@@ -28,10 +22,9 @@
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
     color:var(--ink);
     background:linear-gradient(150deg,var(--blush) 0%,var(--lav) 55%,var(--peach) 100%);
-    background-attachment:fixed;
-    min-height:100dvh;
+    background-attachment:fixed; min-height:100dvh;
     display:flex;align-items:center;justify-content:center;
-    padding:20px;overflow-x:hidden;
+    padding:20px;overflow:hidden;
   }
   .stage{width:100%;max-width:420px}
   .screen{display:none;animation:pop .45s cubic-bezier(.2,.8,.25,1)}
@@ -39,11 +32,8 @@
   @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
 
   .card{
-    background:var(--card);
-    border-radius:28px;
-    padding:34px 26px 30px;
-    text-align:center;
-    box-shadow:0 18px 50px rgba(120,80,150,.28);
+    background:var(--card);border-radius:28px;padding:34px 26px 30px;
+    text-align:center;box-shadow:0 18px 50px rgba(120,80,150,.28);
   }
   .emoji{font-size:66px;line-height:1;margin-bottom:14px;display:block}
   h1{font-size:26px;margin:0 0 8px;font-weight:800;letter-spacing:-.3px}
@@ -51,33 +41,23 @@
 
   .btns{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap;min-height:60px}
   button{
-    font-family:inherit;font-weight:700;font-size:17px;
-    border:none;border-radius:100px;padding:15px 26px;cursor:pointer;
-    transition:transform .12s ease, box-shadow .2s ease;
+    font-family:inherit;font-weight:700;font-size:17px;border:none;border-radius:100px;
+    padding:15px 26px;cursor:pointer;transition:transform .12s ease, box-shadow .2s ease;
   }
   button:active{transform:scale(.96)}
-  .yes{
-    background:var(--yes);color:var(--yes-ink);
-    box-shadow:0 8px 20px rgba(255,79,139,.4);
-  }
+  .yes{background:var(--yes);color:var(--yes-ink);box-shadow:0 8px 20px rgba(255,79,139,.4)}
   .no{
-    background:#e9e4f0;color:var(--ink-soft);
+    background:#e9e4f0;color:var(--ink-soft);position:relative;z-index:20;
+    transition:transform .22s cubic-bezier(.22,.61,.36,1);will-change:transform;
   }
-  .ghost{
-    background:transparent;color:var(--ink);
-    border:2px solid rgba(58,43,74,.18);font-weight:700;
-  }
-  .primary{
-    background:var(--yes);color:#fff;width:100%;
-    box-shadow:0 8px 20px rgba(255,79,139,.4);margin-top:6px;
-  }
+  .ghost{background:transparent;color:var(--ink);border:2px solid rgba(58,43,74,.18);font-weight:700}
+  .primary{background:var(--yes);color:#fff;width:100%;box-shadow:0 8px 20px rgba(255,79,139,.4);margin-top:6px}
 
   .field{text-align:left;margin:0 0 16px}
   .field label{display:block;font-size:14px;font-weight:700;color:var(--ink-soft);margin-bottom:7px}
   .field input{
-    width:100%;font-family:inherit;font-size:16px;
-    padding:14px 16px;border:2px solid #ece5f2;border-radius:16px;
-    background:#fff;color:var(--ink);
+    width:100%;font-family:inherit;font-size:16px;padding:14px 16px;
+    border:2px solid #ece5f2;border-radius:16px;background:#fff;color:var(--ink);
   }
   .field input:focus{outline:none;border-color:var(--yes)}
 
@@ -87,30 +67,22 @@
     from{transform:translateY(-40px) rotate(0);opacity:1}
     to{transform:translateY(110vh) rotate(360deg);opacity:.9}
   }
-
-  @media (prefers-reduced-motion:reduce){
-    .screen{animation:none}
-    .heart{animation-duration:.01s!important;display:none}
-  }
+  @media (prefers-reduced-motion:reduce){.screen{animation:none}.heart{display:none}}
 </style>
 </head>
 <body>
 
 <div class="stage">
 
-  <!-- 0: intro -->
   <section class="screen active" id="s0">
     <div class="card">
       <span class="emoji">:)))</span>
       <h1>mam do Ciebie pytanie</h1>
       <p class="sub">tylko się nie śmiej dobra?</p>
-      <div class="btns">
-        <button class="ghost" onclick="go(1)">no dobra, pokaż →</button>
-      </div>
+      <div class="btns"><button class="ghost" onclick="go(1)">no dobra, pokaż →</button></div>
     </div>
   </section>
 
-  <!-- 1: pytanie -->
   <section class="screen" id="s1">
     <div class="card">
       <span class="emoji">🥺</span>
@@ -123,37 +95,26 @@
     </div>
   </section>
 
-  <!-- 2: celebracja -->
   <section class="screen" id="s2">
     <div class="card">
       <span class="emoji">🎉</span>
       <h1>Zaraz... naprawdę TAK??</h1>
       <p class="sub">byłem pewny że powiesz nie 😭 dobra, ogarniam się</p>
-      <div class="btns">
-        <button class="ghost" onclick="go(3)">okej okej →</button>
-      </div>
+      <div class="btns"><button class="ghost" onclick="go(3)">okej okej →</button></div>
     </div>
   </section>
 
-  <!-- 3: termin -->
   <section class="screen" id="s3">
     <div class="card">
       <span class="emoji">📅</span>
       <h1>To kiedy masz czas?</h1>
       <p class="sub" style="margin-bottom:20px">wybierz dzień i godzinę</p>
-      <div class="field">
-        <label for="day">Który dzień</label>
-        <input type="date" id="day">
-      </div>
-      <div class="field">
-        <label for="time">O której</label>
-        <input type="time" id="time" value="18:00">
-      </div>
-      <button class="primary" onclick="setDate()">ustaw randkę 💌</button>
+      <div class="field"><label for="day">Który dzień</label><input type="date" id="day"></div>
+      <div class="field"><label for="time">O której</label><input type="time" id="time" value="18:00"></div>
+      <button class="primary" id="setBtn" onclick="setDate()">ustaw randkę 💌</button>
     </div>
   </section>
 
-  <!-- 4: koniec -->
   <section class="screen" id="s4">
     <div class="card">
       <span class="emoji">✨</span>
@@ -170,7 +131,9 @@
 <script>
   /* ==================== EDYTUJ TUTAJ ==================== */
   const CONFIG = {
-    herName: "",   // np. "Kasiu" -> pytanie zmieni się na "...na randkę, Kasiu?". Zostaw "" jeśli nie chcesz.
+    herName: "",       // np. "Kasiu" -> "...na randkę, Kasiu?". Zostaw "" jeśli nie chcesz.
+    formEndpoint: ""   // adres z Formspree, np. "https://formspree.io/f/abcdwxyz".
+                       // Zostaw "" jeśli nie chcesz maila. Instrukcja w wiadomości.
   };
   /* ===================================================== */
 
@@ -183,47 +146,82 @@
   function go(n){
     screens.forEach(s=>s.classList.remove('active'));
     document.getElementById('s'+n).classList.add('active');
-    if(n===3){ // dzisiejsza data jako minimum
+    if(n===3){
       const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
       document.getElementById('day').min=d.toISOString().slice(0,10);
     }
     if(n===2) rain();
   }
 
-  /* ---- uciekające "nie" ---- */
+  /* ---- odskakujące "nie" ---- */
   const noBtn = document.getElementById('noBtn');
   const yesBtn = document.getElementById('yesBtn');
-  let yesScale = 1;
+  let tx=0, ty=0, home=null, yesScale=1;
 
-  function dodge(e){
-    if(e) e.preventDefault();
-    noBtn.style.position = 'fixed';
-    const bw = noBtn.offsetWidth, bh = noBtn.offsetHeight;
-    const maxX = window.innerWidth  - bw - 12;
-    const maxY = window.innerHeight - bh - 12;
-    const x = Math.max(12, Math.random()*maxX);
-    const y = Math.max(12, Math.random()*maxY);
-    noBtn.style.left = x+'px';
-    noBtn.style.top  = y+'px';
-    // "tak" rośnie z każdą próbą
-    yesScale = Math.min(yesScale+0.12, 2);
-    yesBtn.style.transform = 'scale('+yesScale+')';
+  function ensureHome(){
+    if(home) return;
+    const r=noBtn.getBoundingClientRect();
+    home={x:r.left+r.width/2-tx, y:r.top+r.height/2-ty};
   }
-  ['mouseenter','touchstart','click','pointerdown'].forEach(ev=>
-    noBtn.addEventListener(ev, dodge, {passive:false})
+  function growYes(){
+    yesScale=Math.min(yesScale+0.06,1.7);
+    yesBtn.style.transform='scale('+yesScale+')';
+  }
+  function flee(px,py){
+    ensureHome();
+    const r=noBtn.getBoundingClientRect();
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    let dx=cx-px, dy=cy-py, d=Math.hypot(dx,dy);
+    if(d<8){ // palec/kursor prosto na przycisku -> pchnij na zewnątrz
+      dx=cx-window.innerWidth/2; dy=cy-window.innerHeight/2;
+      d=Math.hypot(dx,dy)||1;
+    }
+    const step=120;
+    let ncx=cx+dx/d*step, ncy=cy+dy/d*step;
+    const m=14, bw=r.width, bh=r.height;
+    // gdyby dobiło do ściany, ślizg wzdłuż niej żeby się nie dało zapędzić w róg
+    if(ncx< m+bw/2 || ncx> window.innerWidth-m-bw/2) ncy+=(Math.random()<.5?-1:1)*step*0.8;
+    if(ncy< m+bh/2 || ncy> window.innerHeight-m-bh/2) ncx+=(Math.random()<.5?-1:1)*step*0.8;
+    ncx=Math.min(Math.max(ncx,m+bw/2),window.innerWidth-m-bw/2);
+    ncy=Math.min(Math.max(ncy,m+bh/2),window.innerHeight-m-bh/2);
+    tx=ncx-home.x; ty=ncy-home.y;
+    noBtn.style.transform='translate('+tx+'px,'+ty+'px)';
+    growYes();
+  }
+
+  // desktop: odskakuje gdy kursor się zbliża
+  document.addEventListener('mousemove',e=>{
+    if(!document.getElementById('s1').classList.contains('active')) return;
+    const r=noBtn.getBoundingClientRect();
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    if(Math.hypot(cx-e.clientX,cy-e.clientY)<130) flee(e.clientX,e.clientY);
+  });
+  // mobile / klik: odskakuje od dotknięcia i nie da się wcisnąć
+  ['touchstart','pointerdown','click'].forEach(ev=>
+    noBtn.addEventListener(ev,e=>{
+      e.preventDefault();
+      const t=e.touches&&e.touches[0]?e.touches[0]:e;
+      flee(t.clientX||0,t.clientY||0);
+    },{passive:false})
   );
 
-  /* ---- termin ---- */
+  /* ---- termin + mail ---- */
   function setDate(){
-    const day = document.getElementById('day').value;
-    const time = document.getElementById('time').value;
+    const day=document.getElementById('day').value;
+    const time=document.getElementById('time').value;
     if(!day){ alert('wybierz dzień :)'); return; }
     const dni=['niedzielę','poniedziałek','wtorek','środę','czwartek','piątek','sobotę'];
-    const d = new Date(day+'T'+(time||'18:00'));
-    const txt = dni[d.getDay()] + ', ' +
-      d.getDate() + '.' + String(d.getMonth()+1).padStart(2,'0') +
-      (time ? ' o '+time : '');
-    document.getElementById('finalTxt').textContent = 'widzimy się w '+txt+'.';
+    const d=new Date(day+'T'+(time||'18:00'));
+    const txt=dni[d.getDay()]+', '+d.getDate()+'.'+String(d.getMonth()+1).padStart(2,'0')+(time?' o '+time:'');
+    document.getElementById('finalTxt').textContent='widzimy się w '+txt+'.';
+
+    if(CONFIG.formEndpoint.trim()){
+      fetch(CONFIG.formEndpoint.trim(),{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body:JSON.stringify({termin:txt, dzien:day, godzina:time||'—'})
+      }).catch(()=>{});
+    }
     go(4); rain();
   }
 
