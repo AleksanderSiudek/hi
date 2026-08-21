@@ -35,7 +35,13 @@
     background:var(--card);border-radius:28px;padding:34px 26px 30px;
     text-align:center;box-shadow:0 18px 50px rgba(120,80,150,.28);
   }
+  .pfp{
+    width:120px;height:120px;border-radius:50%;object-fit:cover;
+    margin:0 auto 16px;display:block;border:4px solid #fff;
+    box-shadow:0 8px 24px rgba(120,80,150,.32);
+  }
   .emoji{font-size:66px;line-height:1;margin-bottom:14px;display:block}
+  .who{font-size:14px;font-weight:700;color:var(--yes);margin:0 0 6px;letter-spacing:.3px}
   h1{font-size:26px;margin:0 0 8px;font-weight:800;letter-spacing:-.3px}
   p.sub{margin:0 0 22px;color:var(--ink-soft);font-size:16px;line-height:1.4}
 
@@ -52,6 +58,15 @@
   }
   .ghost{background:transparent;color:var(--ink);border:2px solid rgba(58,43,74,.18);font-weight:700}
   .primary{background:var(--yes);color:#fff;width:100%;box-shadow:0 8px 20px rgba(255,79,139,.4);margin-top:6px}
+
+  .opt{
+    display:block;width:100%;text-align:left;background:#fff;color:var(--ink);
+    border:2px solid #ece5f2;border-radius:18px;padding:16px 18px;margin-bottom:11px;
+    font-size:16px;transition:border-color .15s ease, transform .1s ease;
+  }
+  .opt:hover{border-color:var(--yes)}
+  .opt:active{transform:scale(.98)}
+  .opt .em{margin-right:10px;font-size:20px}
 
   .field{text-align:left;margin:0 0 16px}
   .field label{display:block;font-size:14px;font-weight:700;color:var(--ink-soft);margin-bottom:7px}
@@ -74,15 +89,19 @@
 
 <div class="stage">
 
+  <!-- 0: intro ze zdjęciem -->
   <section class="screen active" id="s0">
     <div class="card">
-      <span class="emoji">:)))</span>
+      <img class="pfp" id="pfp" alt="" style="display:none">
+      <span class="emoji" id="pfpFallback">:)))</span>
+      <p class="who" id="who" style="display:none"></p>
       <h1>mam do Ciebie pytanie</h1>
       <p class="sub">tylko się nie śmiej dobra?</p>
       <div class="btns"><button class="ghost" onclick="go(1)">no dobra, pokaż →</button></div>
     </div>
   </section>
 
+  <!-- 1: pytanie -->
   <section class="screen" id="s1">
     <div class="card">
       <span class="emoji">🥺</span>
@@ -95,16 +114,46 @@
     </div>
   </section>
 
+  <!-- 2: jej imię -->
   <section class="screen" id="s2">
     <div class="card">
-      <span class="emoji">🎉</span>
-      <h1>Zaraz... naprawdę TAK??</h1>
-      <p class="sub">byłem pewny że powiesz nie 😭 dobra, ogarniam się</p>
-      <div class="btns"><button class="ghost" onclick="go(3)">okej okej →</button></div>
+      <span class="emoji">✍️</span>
+      <h1>Super! To jak Ci na imię?</h1>
+      <p class="sub" style="margin-bottom:18px">żebym wiedział z kim mam przyjemność :)</p>
+      <div class="field">
+        <label for="name">Imię i nazwisko</label>
+        <input type="text" id="name" placeholder="np. Kasia Nowak" autocomplete="name">
+      </div>
+      <button class="primary" onclick="pickName()">dalej →</button>
     </div>
   </section>
 
+  <!-- 3: celebracja -->
   <section class="screen" id="s3">
+    <div class="card">
+      <span class="emoji">🎉</span>
+      <h1 id="celebrate">Zaraz... naprawdę TAK??</h1>
+      <p class="sub">byłem pewny że powiesz nie 😭 dobra, ogarniam się</p>
+      <div class="btns"><button class="ghost" onclick="go(4)">okej okej →</button></div>
+    </div>
+  </section>
+
+  <!-- 4: 5 opcji -->
+  <section class="screen" id="s4">
+    <div class="card">
+      <span class="emoji">💡</span>
+      <h1>To na co masz ochotę?</h1>
+      <p class="sub" style="margin-bottom:20px">wybierz co robimy</p>
+      <button class="opt" onclick="pickOption('kawa ☕')"><span class="em">☕</span>Idziemy na kawę</button>
+      <button class="opt" onclick="pickOption('kino 🎬')"><span class="em">🎬</span>Idziemy do kina</button>
+      <button class="opt" onclick="pickOption('spacer 🌳')"><span class="em">🌳</span>Idziemy na spacer</button>
+      <button class="opt" onclick="pickOption('coś dobrego do zjedzenia 🍝')"><span class="em">🍝</span>Coś dobrego do zjedzenia</button>
+      <button class="opt" onclick="pickOption('niespodzianka 🎁')"><span class="em">🎁</span>Niespodzianka (zaufaj mi)</button>
+    </div>
+  </section>
+
+  <!-- 5: termin -->
+  <section class="screen" id="s5">
     <div class="card">
       <span class="emoji">📅</span>
       <h1>To kiedy masz czas?</h1>
@@ -115,7 +164,8 @@
     </div>
   </section>
 
-  <section class="screen" id="s4">
+  <!-- 6: koniec -->
+  <section class="screen" id="s6">
     <div class="card">
       <span class="emoji">✨</span>
       <h1>Zapisane!</h1>
@@ -131,31 +181,55 @@
 <script>
   /* ==================== EDYTUJ TUTAJ ==================== */
   const CONFIG = {
-    herName: "",       // np. "Kasiu" -> "...na randkę, Kasiu?". Zostaw "" jeśli nie chcesz.
-    formEndpoint: "https://formspree.io/f/mzepvzyo"   // adres z Formspree, np. "https://formspree.io/f/abcdwxyz".
-                       // Zostaw "" jeśli nie chcesz maila. Instrukcja w wiadomości.
+    myName: "",        // Twoje imię pod zdjęciem, np. "Aleksander". Zostaw "" jeśli nie chcesz.
+    photoUrl: "me.jpg",// nazwa Twojego zdjęcia wrzuconego do repo (np. me.jpg). Zostaw "" jeśli bez zdjęcia.
+    formEndpoint: "https://formspree.io/f/mzepvzyo"  // adres z Formspree.
   };
   /* ===================================================== */
 
-  if (CONFIG.herName.trim()){
-    document.getElementById('q').textContent =
-      "Pójdziesz ze mną na randkę, " + CONFIG.herName.trim() + "?";
-  }
+  // zdjęcie profilowe
+  (function(){
+    const pfp=document.getElementById('pfp');
+    const fb=document.getElementById('pfpFallback');
+    const who=document.getElementById('who');
+    if(CONFIG.photoUrl.trim()){
+      pfp.onload=()=>{ pfp.style.display='block'; fb.style.display='none'; };
+      pfp.onerror=()=>{ pfp.style.display='none'; fb.style.display='block'; };
+      pfp.src=CONFIG.photoUrl.trim();
+    }
+    if(CONFIG.myName.trim()){
+      who.textContent='tu '+CONFIG.myName.trim();
+      who.style.display='block';
+    }
+  })();
 
-  const screens = [...document.querySelectorAll('.screen')];
+  let girlName='', choice='';
+
+  const screens=[...document.querySelectorAll('.screen')];
   function go(n){
     screens.forEach(s=>s.classList.remove('active'));
     document.getElementById('s'+n).classList.add('active');
-    if(n===3){
+    if(n===5){
       const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
       document.getElementById('day').min=d.toISOString().slice(0,10);
     }
-    if(n===2) rain();
+    if(n===3) rain();
   }
 
+  function pickName(){
+    const v=document.getElementById('name').value.trim();
+    if(!v){ alert('wpisz imię :)'); return; }
+    girlName=v;
+    const first=v.split(' ')[0];
+    document.getElementById('celebrate').textContent='Zaraz... naprawdę TAK, '+first+'??';
+    go(3);
+  }
+
+  function pickOption(label){ choice=label; go(5); }
+
   /* ---- odskakujące "nie" ---- */
-  const noBtn = document.getElementById('noBtn');
-  const yesBtn = document.getElementById('yesBtn');
+  const noBtn=document.getElementById('noBtn');
+  const yesBtn=document.getElementById('yesBtn');
   let tx=0, ty=0, home=null, yesScale=1;
 
   function ensureHome(){
@@ -163,23 +237,16 @@
     const r=noBtn.getBoundingClientRect();
     home={x:r.left+r.width/2-tx, y:r.top+r.height/2-ty};
   }
-  function growYes(){
-    yesScale=Math.min(yesScale+0.06,1.7);
-    yesBtn.style.transform='scale('+yesScale+')';
-  }
+  function growYes(){ yesScale=Math.min(yesScale+0.06,1.7); yesBtn.style.transform='scale('+yesScale+')'; }
   function flee(px,py){
     ensureHome();
     const r=noBtn.getBoundingClientRect();
     const cx=r.left+r.width/2, cy=r.top+r.height/2;
     let dx=cx-px, dy=cy-py, d=Math.hypot(dx,dy);
-    if(d<8){ // palec/kursor prosto na przycisku -> pchnij na zewnątrz
-      dx=cx-window.innerWidth/2; dy=cy-window.innerHeight/2;
-      d=Math.hypot(dx,dy)||1;
-    }
+    if(d<8){ dx=cx-window.innerWidth/2; dy=cy-window.innerHeight/2; d=Math.hypot(dx,dy)||1; }
     const step=120;
     let ncx=cx+dx/d*step, ncy=cy+dy/d*step;
     const m=14, bw=r.width, bh=r.height;
-    // gdyby dobiło do ściany, ślizg wzdłuż niej żeby się nie dało zapędzić w róg
     if(ncx< m+bw/2 || ncx> window.innerWidth-m-bw/2) ncy+=(Math.random()<.5?-1:1)*step*0.8;
     if(ncy< m+bh/2 || ncy> window.innerHeight-m-bh/2) ncx+=(Math.random()<.5?-1:1)*step*0.8;
     ncx=Math.min(Math.max(ncx,m+bw/2),window.innerWidth-m-bw/2);
@@ -188,15 +255,12 @@
     noBtn.style.transform='translate('+tx+'px,'+ty+'px)';
     growYes();
   }
-
-  // desktop: odskakuje gdy kursor się zbliża
   document.addEventListener('mousemove',e=>{
     if(!document.getElementById('s1').classList.contains('active')) return;
     const r=noBtn.getBoundingClientRect();
     const cx=r.left+r.width/2, cy=r.top+r.height/2;
     if(Math.hypot(cx-e.clientX,cy-e.clientY)<130) flee(e.clientX,e.clientY);
   });
-  // mobile / klik: odskakuje od dotknięcia i nie da się wcisnąć
   ['touchstart','pointerdown','click'].forEach(ev=>
     noBtn.addEventListener(ev,e=>{
       e.preventDefault();
@@ -213,16 +277,16 @@
     const dni=['niedzielę','poniedziałek','wtorek','środę','czwartek','piątek','sobotę'];
     const d=new Date(day+'T'+(time||'18:00'));
     const txt=dni[d.getDay()]+', '+d.getDate()+'.'+String(d.getMonth()+1).padStart(2,'0')+(time?' o '+time:'');
-    document.getElementById('finalTxt').textContent='widzimy się w '+txt+'.';
+    document.getElementById('finalTxt').textContent='widzimy się w '+txt+(choice?' — '+choice:'')+'.';
 
     if(CONFIG.formEndpoint.trim()){
       fetch(CONFIG.formEndpoint.trim(),{
         method:'POST',
         headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body:JSON.stringify({termin:txt, dzien:day, godzina:time||'—'})
+        body:JSON.stringify({imie:girlName||'—', plan:choice||'—', termin:txt, dzien:day, godzina:time||'—'})
       }).catch(()=>{});
     }
-    go(4); rain();
+    go(6); rain();
   }
 
   /* ---- serduszka ---- */
